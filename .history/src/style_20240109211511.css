@@ -1,0 +1,9 @@
+body {
+  margin: 0;
+}
+.header {
+  background-color: #3560f9;
+  padding-left: 30px;
+  padding-bottom: 8px;
+  align-items: center;
+}

@@ -1,0 +1,8 @@
+:root {
+  box-sizing: border-box;
+  padding: 0;
+  margin: none;
+}
+.header {
+  background-color: #2c61e8;
+}

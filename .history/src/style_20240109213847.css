@@ -1,0 +1,13 @@
+body {
+  margin: 0;
+}
+.header {
+  background-color: #0366d6;
+  padding-left: 30px;
+  padding-bottom: 15px;
+  align-items: center;
+}
+.logo {
+  width: 80px;
+  height: 80px;
+}
