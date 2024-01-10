@@ -10,7 +10,11 @@ const UserSearch = () => {
   const perPage = 4;
 
   const { data, error, isLoading } = useGetUserQuery(debouncedUsername);
-
+  const {
+    data: reposData,
+    error: reposError,
+    isLoading: isReposLoading,
+  } = useGetUserReposQuery(debouncedUsername);
   const {
     data: reposData,
     error: reposError,
@@ -32,11 +36,6 @@ const UserSearch = () => {
   const handlePageChange = (newPage: number) => {
     setPage(newPage);
   };
-
-  const totalPages = reposData?.pages ?? 0;
-  const totalItems = reposData?.length ?? 0;
-  const startIndex = (page - 1) * perPage + 1;
-  const endIndex = Math.min(startIndex + perPage - 1, totalItems);
 
   return (
     <>
@@ -93,22 +92,19 @@ const UserSearch = () => {
                   ))}
                 </ul>
                 <div>
-                  <p>
-                    {startIndex}-{endIndex} of {totalItems} items.{" "}
-                  </p>
-                  <div>
-                    {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-                      (pageNum) => (
-                        <button
-                          key={pageNum}
-                          onClick={() => handlePageChange(pageNum)}
-                          disabled={pageNum === page}
-                        >
-                          {pageNum}
-                        </button>
-                      )
-                    )}
-                  </div>
+                  <button
+                    onClick={() => handlePageChange(page - 1)}
+                    disabled={page === 1}
+                  >
+                    Previous Page
+                  </button>
+                  <span> Page {page} </span>
+                  <button
+                    onClick={() => handlePageChange(page + 1)}
+                    disabled={reposData.length < perPage}
+                  >
+                    Next Page
+                  </button>
                 </div>
               </div>
             ) : (
