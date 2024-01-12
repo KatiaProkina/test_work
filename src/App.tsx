@@ -128,7 +128,6 @@ const UserSearch = () => {
                   <Stack spacing={2}>
                     <Pagination
                       count={data.public_repos / 4}
-                      // page={}
                       onClick={() => handlePageChange(page + 1)}
                     />
                   </Stack>
