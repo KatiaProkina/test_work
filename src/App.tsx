@@ -125,14 +125,14 @@ const UserSearch = () => {
                 </ul>
                 <div className="pagination">
                   <div>1-4 of {data.public_repos} items</div>
-                  <Stack spacing={2}>
+                  {/* <Stack spacing={2}>
                     <Pagination
                       count={data.public_repos / 4}
                       onClick={() => handlePageChange(page + 1)}
                     />
-                  </Stack>
+                  </Stack> */}
 
-                  {/* <button
+                  <button
                     onClick={() => handlePageChange(page - 1)}
                     disabled={page === 1}
                     className="btn-arrow"
@@ -146,7 +146,7 @@ const UserSearch = () => {
                     className="btn-arrow"
                   >
                     <img src="../public/right-arrow.png" alt="" />
-                  </button> */}
+                  </button>
                 </div>
               </div>
             ) : (
