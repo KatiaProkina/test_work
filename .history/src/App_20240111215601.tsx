@@ -2,8 +2,10 @@ import { useState } from "react";
 import "./style.css";
 import { useGetUserQuery, useGetUserReposQuery } from "./gitHubApiSlice";
 import { useDebounce } from "use-debounce";
-import Pagination from "@mui/material/Pagination";
-import Stack from "@mui/material/Stack";
+import { Pagination } from "../node_modules/@mui/material/index";
+import { PaginationItem } from "../node_modules/@mui/material/index";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
 const UserSearch = () => {
   const [username, setUsername] = useState("");
@@ -124,13 +126,35 @@ const UserSearch = () => {
                 </ul>
                 <div className="pagination">
                   <div>1-4 of {data.public_repos} items</div>
-                  <Stack spacing={2}>
-                    <Pagination
-                      count={data.public_repos / 4}
-                      // page={}
-                      onClick={() => handlePageChange(page + 1)}
-                    />
-                  </Stack>
+                  <Pagination
+                    count={data.public_repos / 4}
+                    renderItem={(item) => (
+                      <ArrowBackIcon onClick={() => handlePageChange(page - 1)} />
+                      <ArrowForwardIcon onClick={() => handlePageChange(page + 1)}/>
+                      // <PaginationItem
+                      //   slots={{
+                      //     previous: ArrowBackIcon ,
+                      //     next: ArrowForwardIcon,
+                      //   }}
+                      //   {...item}
+                      // />
+                    )}
+                  />
+                  {/* <button
+                    onClick={() => handlePageChange(page - 1)}
+                    disabled={page === 1}
+                    className="btn-arrow"
+                  >
+                    <img src="../public/left-arrow.png" alt="" />
+                  </button>
+                  <span> Page {page} </span>
+                  <button
+                    onClick={() => handlePageChange(page + 1)}
+                    disabled={reposData.length < perPage}
+                    className="btn-arrow"
+                  >
+                    <img src="../public/right-arrow.png" alt="" />
+                  </button> */}
                 </div>
               </div>
             ) : (

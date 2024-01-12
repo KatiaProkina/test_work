@@ -1,6 +1,5 @@
 body {
   margin: 0;
-  background-color: whitesmoke;
 }
 .header {
   display: flex;
@@ -32,11 +31,10 @@ body {
 .user-container {
   display: flex;
   padding-top: 50px;
-  padding-left: 50px;
-  padding-right: 50px;
 }
 .user-information {
   flex-basis: 30%;
+  padding-left: 50px;
 }
 .user-name {
   font-size: 24px;
@@ -52,54 +50,11 @@ body {
 .follow-container {
   display: flex;
   padding-top: 30px;
-  gap: 15px;
+  gap: 10px;
   color: gray;
   align-items: center;
 }
 .user-followers {
   display: contents;
   align-items: center;
-}
-.user-following {
-  display: contents;
-  align-items: center;
-}
-.repos-container {
-  flex-basis: 70%;
-  display: flex;
-  flex-direction: column;
-}
-.title {
-  font-size: 42px;
-  font-weight: 600;
-  margin: 0;
-}
-.repos {
-  list-style-type: none;
-  padding: 0;
-}
-.repos-element {
-  display: flex;
-  flex-direction: column;
-  padding-left: 20px;
-  padding-top: 27px;
-  padding-bottom: 20px;
-  background-color: white;
-  margin-bottom: 20px;
-  gap: 8px;
-  width: 100%;
-}
-.repo-name {
-  font-size: 24px;
-  font-weight: 400;
-  color: #0366d6;
-}
-.pagination {
-  display: flex;
-  gap: 15px;
-  align-self: flex-end;
-}
-.btn-arrow {
-  border: none;
-  background-color: whitesmoke;
 }

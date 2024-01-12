@@ -95,8 +95,6 @@ body {
   color: #0366d6;
 }
 .pagination {
-  display: flex;
-  gap: 15px;
   align-self: flex-end;
 }
 .btn-arrow {

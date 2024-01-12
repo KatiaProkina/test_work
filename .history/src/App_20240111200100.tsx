@@ -2,8 +2,6 @@ import { useState } from "react";
 import "./style.css";
 import { useGetUserQuery, useGetUserReposQuery } from "./gitHubApiSlice";
 import { useDebounce } from "use-debounce";
-import Pagination from "@mui/material/Pagination";
-import Stack from "@mui/material/Stack";
 
 const UserSearch = () => {
   const [username, setUsername] = useState("");
@@ -37,7 +35,7 @@ const UserSearch = () => {
 
   function formatNumber(num: number): string {
     if (num >= 1000) {
-      return `${(num / 100).toFixed(1)}k`;
+      return `${(num / 1000).toFixed(1)}k`;
     } else {
       return num.toString();
     }
@@ -124,13 +122,21 @@ const UserSearch = () => {
                 </ul>
                 <div className="pagination">
                   <div>1-4 of {data.public_repos} items</div>
-                  <Stack spacing={2}>
-                    <Pagination
-                      count={data.public_repos / 4}
-                      // page={}
-                      onClick={() => handlePageChange(page + 1)}
-                    />
-                  </Stack>
+                  <button
+                    onClick={() => handlePageChange(page - 1)}
+                    disabled={page === 1}
+                    className="btn-arrow"
+                  >
+                    <img src="../public/left-arrow.png" alt="" />
+                  </button>
+                  <span> Page {page} </span>
+                  <button
+                    onClick={() => handlePageChange(page + 1)}
+                    disabled={reposData.length < perPage}
+                    className="btn-arrow"
+                  >
+                    <img src="../public/right-arrow.png" alt="" />
+                  </button>
                 </div>
               </div>
             ) : (

@@ -10,12 +10,18 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emotion/react": "^11.11.3",
+    "@emotion/styled": "^11.11.0",
+    "@mui/icons-material": "^5.15.4",
+    "@mui/material": "^5.15.4",
+    "@mui/styled-engine-sc": "^6.0.0-alpha.12",
     "@reduxjs/toolkit": "^2.0.1",
     "axios": "^1.6.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-query": "^3.39.3",
     "react-redux": "^9.0.4",
+    "styled-components": "^6.1.8",
     "use-debounce": "^10.0.0",
     "usehooks-ts": "^2.9.2"
   },

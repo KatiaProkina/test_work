@@ -2,6 +2,7 @@ import { useState } from "react";
 import "./style.css";
 import { useGetUserQuery, useGetUserReposQuery } from "./gitHubApiSlice";
 import { useDebounce } from "use-debounce";
+import Typography from "@mui/material/Typography";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 
@@ -124,13 +125,30 @@ const UserSearch = () => {
                 </ul>
                 <div className="pagination">
                   <div>1-4 of {data.public_repos} items</div>
-                  <Stack spacing={2}>
+                  {/* <Stack spacing={2}>
+                    <Typography>Page: {page}</Typography>
                     <Pagination
                       count={data.public_repos / 4}
                       // page={}
                       onClick={() => handlePageChange(page + 1)}
                     />
-                  </Stack>
+                  </Stack> */}
+
+                  <button
+                    onClick={() => handlePageChange(page - 1)}
+                    disabled={page === 1}
+                    className="btn-arrow"
+                  >
+                    <img src="../public/left-arrow.png" alt="" />
+                  </button>
+                  <span> Page {page} </span>
+                  <button
+                    onClick={() => handlePageChange(page + 1)}
+                    disabled={reposData.length < perPage}
+                    className="btn-arrow"
+                  >
+                    <img src="../public/right-arrow.png" alt="" />
+                  </button>
                 </div>
               </div>
             ) : (

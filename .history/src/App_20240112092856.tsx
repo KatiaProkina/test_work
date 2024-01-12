@@ -2,6 +2,7 @@ import { useState } from "react";
 import "./style.css";
 import { useGetUserQuery, useGetUserReposQuery } from "./gitHubApiSlice";
 import { useDebounce } from "use-debounce";
+
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 
