@@ -19,14 +19,11 @@ const UserSearch = () => {
     data: reposData,
     error: reposError,
     isLoading: isReposLoading,
-  } = useGetUserReposQuery(
-    { username: debouncedUsername, page, perPage },
-    {
-      headers: {
-        Authorization: token,
-      },
-    }
-  );
+  } = useGetUserReposQuery({ username: debouncedUsername, page, perPage }, {
+    headers: {
+      Authorization: token,
+    },
+  } as any);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUsername(e.target.value);
@@ -71,7 +68,11 @@ const UserSearch = () => {
         {debouncedUsername && debouncedUsername.length > 0 && (
           <>
             {isLoading && <p>Loading...</p>}
-            {error && <p>Error: {error.message}</p>}
+            {error && (
+              <p>
+                Error: {"message" in error ? error.message : "Unknown error"}
+              </p>
+            )}
 
             {data && (
               <div className="user-information">
@@ -110,14 +111,20 @@ const UserSearch = () => {
               <div className="repos-container">
                 <h1 className="title">Repositories ({data.public_repos})</h1>
                 <ul className="repos">
-                  {reposData.map((repo) => (
-                    <li key={repo.id} className="repos-element">
-                      <div className="repo-name">{repo.name}</div>
-                      <div className="repo.description">
-                        {repo.description || "No description available"}
-                      </div>
-                    </li>
-                  ))}
+                  {reposData.map(
+                    (repo: {
+                      id: number;
+                      name: string;
+                      description?: string;
+                    }) => (
+                      <li key={repo.id} className="repos-element">
+                        <div className="repo-name">{repo.name}</div>
+                        <div className="repo.description">
+                          {repo.description || "No description available"}
+                        </div>
+                      </li>
+                    )
+                  )}
                 </ul>
                 <div className="pagination">
                   <div>1-4 of {data.public_repos} items</div>
