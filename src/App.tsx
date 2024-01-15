@@ -160,7 +160,7 @@ const UserSearch = () => {
                     className="btn-arrow"
                   >
                     <img src="../public/right-arrow.png" alt="" />
-                  </button> */}
+                  </button>
                   {/* <Stack spacing={2}>
                     <Stack spacing={2}>
                       <Pagination count={countPage} onClick={paginationFunc} />
