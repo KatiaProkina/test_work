@@ -12,6 +12,7 @@ const UserSearch = () => {
   const [username, setUsername] = useState("");
   const [debouncedUsername] = useDebounce(username, 500);
   const [page, setPage] = useState(1);
+  const [hasInput, setHasInput] = useState(false);
 
   const { data, error, isLoading } = useGetUserQuery(debouncedUsername);
 
@@ -28,8 +29,17 @@ const UserSearch = () => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUsername(e.target.value);
     setPage(1);
+    setHasInput(true);
   };
-
+  if (hasInput && !debouncedUsername) {
+    console.error("Invalid debouncedUsername");
+    // Можно также вывести сообщение пользователю или принять другие меры
+    return (
+      <div>
+        <p>Please enter a valid GitHub username.</p>
+      </div>
+    );
+  }
   const handlePageChange = (newPage: number) => {
     setPage(newPage);
   };
@@ -47,6 +57,11 @@ const UserSearch = () => {
   let countPage = data?.public_repos
     ? Math.ceil(data.public_repos / perPage)
     : 0;
+
+  const apiUrl =
+    "https://api.github.com/users/${debouncedUsername}/repos?per_page=4&page=1";
+  console.log(apiUrl);
+
   return (
     <>
       <header className="header">
@@ -131,11 +146,26 @@ const UserSearch = () => {
                 </ul>
                 <div className="pagination">
                   <div>1-4 of {data.public_repos} items</div>
-                  <Stack spacing={2}>
+                  <button
+                    onClick={() => handlePageChange(page - 1)}
+                    disabled={page === 1}
+                    className="btn-arrow"
+                  >
+                    <img src="../public/left-arrow.png" alt="" />
+                  </button>
+                  <span> Page {page} </span>
+                  <button
+                    onClick={() => handlePageChange(page + 1)}
+                    disabled={reposData.length < perPage}
+                    className="btn-arrow"
+                  >
+                    <img src="../public/right-arrow.png" alt="" />
+                  </button> */}
+                  {/* <Stack spacing={2}>
                     <Stack spacing={2}>
                       <Pagination count={countPage} onClick={paginationFunc} />
                     </Stack>
-                  </Stack>
+                  </Stack> */}
                 </div>
               </div>
             ) : (
