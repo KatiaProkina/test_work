@@ -104,7 +104,10 @@ const UserSearch = () => {
 
             {isReposLoading && <p>Loading repositories...</p>}
             {reposError && (
-              <p>Error loading repositories: {reposError.message}</p>
+              <p>
+                Error loading repositories:{" "}
+                {"message" in reposError ? reposError.message : "Unknown error"}
+              </p>
             )}
 
             {reposData && reposData.length > 0 ? (
