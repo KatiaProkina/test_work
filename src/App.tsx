@@ -6,7 +6,7 @@ import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 
 const perPage = 4;
-const token = ` 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`;
+const token = `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`;
 
 const UserSearch = () => {
   const [username, setUsername] = useState("");
@@ -21,7 +21,7 @@ const UserSearch = () => {
     isLoading: isReposLoading,
   } = useGetUserReposQuery({ username: debouncedUsername, page, perPage }, {
     headers: {
-      Authorization: token,
+      Authorization: `Bearer ${token}`,
     },
   } as any);
 
