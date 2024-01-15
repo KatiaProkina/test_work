@@ -2,8 +2,8 @@ import { useState } from "react";
 import "./style.css";
 import { useGetUserQuery, useGetUserReposQuery } from "./gitHubApiSlice";
 import { useDebounce } from "use-debounce";
-import Pagination from "@mui/material/Pagination";
-import Stack from "@mui/material/Stack";
+// import Pagination from "@mui/material/Pagination";
+// import Stack from "@mui/material/Stack";
 
 const perPage = 4;
 const token = `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`;
