@@ -2,15 +2,16 @@ import { useState } from "react";
 import "./style.css";
 import { useGetUserQuery, useGetUserReposQuery } from "./gitHubApiSlice";
 import { useDebounce } from "use-debounce";
-
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
+
+const perPage = 4;
+const token = ` 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`;
 
 const UserSearch = () => {
   const [username, setUsername] = useState("");
   const [debouncedUsername] = useDebounce(username, 500);
   const [page, setPage] = useState(1);
-  const perPage = 4;
 
   const { data, error, isLoading } = useGetUserQuery(debouncedUsername);
 
@@ -22,7 +23,7 @@ const UserSearch = () => {
     { username: debouncedUsername, page, perPage },
     {
       headers: {
-        Authorization: ` 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`,
+        Authorization: token,
       },
     }
   );
@@ -39,11 +40,16 @@ const UserSearch = () => {
   function formatNumber(num: number): string {
     if (num >= 1000) {
       return `${(num / 100).toFixed(1)}k`;
-    } else {
-      return num.toString();
     }
+    return num.toString();
   }
 
+  const paginationFunc = () => {
+    handlePageChange(page + 1);
+  };
+  let countPage = data?.public_repos
+    ? Math.ceil(data.public_repos / perPage)
+    : 0;
   return (
     <>
       <header className="header">
@@ -72,11 +78,7 @@ const UserSearch = () => {
                 <img
                   src={data.avatar_url}
                   alt="User Avatar"
-                  style={{
-                    width: "300px",
-                    height: "300px",
-                    borderRadius: "150px",
-                  }}
+                  className="avatar-img"
                 />
                 <div className="user-name"> {data.name || "N/A"}</div>
                 <div className="user-login">{data.login}</div>
@@ -84,20 +86,14 @@ const UserSearch = () => {
                   <div className="user-followers">
                     <img
                       src="../public/followers.png"
-                      style={{
-                        width: "25px",
-                        height: "25px",
-                      }}
+                      className="followers-img"
                     />
                     {formatNumber(data.followers)} followers
                   </div>
                   <div className="user-following">
                     <img
                       src="../public/following.png"
-                      style={{
-                        width: "20px",
-                        height: "20px",
-                      }}
+                      className="following-img"
                     />
                     {data.following} following
                   </div>
@@ -125,28 +121,11 @@ const UserSearch = () => {
                 </ul>
                 <div className="pagination">
                   <div>1-4 of {data.public_repos} items</div>
-                  {/* <Stack spacing={2}>
-                    <Pagination
-                      count={data.public_repos / 4}
-                      onClick={() => handlePageChange(page + 1)}
-                    />
-                  </Stack> */}
-
-                  <button
-                    onClick={() => handlePageChange(page - 1)}
-                    disabled={page === 1}
-                    className="btn-arrow"
-                  >
-                    <img src="../public/left-arrow.png" alt="" />
-                  </button>
-                  <span> Page {page} </span>
-                  <button
-                    onClick={() => handlePageChange(page + 1)}
-                    disabled={reposData.length < perPage}
-                    className="btn-arrow"
-                  >
-                    <img src="../public/right-arrow.png" alt="" />
-                  </button>
+                  <Stack spacing={2}>
+                    <Stack spacing={2}>
+                      <Pagination count={countPage} onClick={paginationFunc} />
+                    </Stack>
+                  </Stack>
                 </div>
               </div>
             ) : (

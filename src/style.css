@@ -103,3 +103,19 @@ body {
   border: none;
   background-color: whitesmoke;
 }
+
+.avatar-img {
+  width: 300px;
+  height: 300px;
+  border-radius: 150px;
+}
+
+.followers-img {
+  width: 25px;
+  height: 25px;
+}
+
+.following-img {
+  width: 20px;
+  height: 20px;
+}

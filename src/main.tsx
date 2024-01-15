@@ -1,18 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { configureStore } from "@reduxjs/toolkit";
-
-import { githubApi } from "./gitHubApiSlice";
 import { Provider } from "../node_modules/react-redux/dist/react-redux";
 import UserSearch from "./App";
-
-const store = configureStore({
-  reducer: {
-    [githubApi.reducerPath]: githubApi.reducer,
-  },
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(githubApi.middleware),
-});
+import store from "./store";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
