@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { Provider } from "../node_modules/react-redux/dist/react-redux";
+import { Provider } from "react-redux";
 import UserSearch from "./App";
 import store from "./store";
 

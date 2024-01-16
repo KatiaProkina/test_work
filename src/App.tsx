@@ -1,17 +1,24 @@
 import { useState } from "react";
 import "./style.css";
 import { useGetUserQuery, useGetUserReposQuery } from "./gitHubApiSlice";
-import { useDebounce } from "use-debounce";
-// import Pagination from "@mui/material/Pagination";
-// import Stack from "@mui/material/Stack";
+import useDebounce from "./useDebounce";
+import Pagination from "./Pagination";
+import imgFollowers from "../public/followers.png";
+import imgFollowing from "../public/following.png";
 
-const perPage = 4;
-const token = `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`;
+interface Repo {
+  id: number;
+  name: string;
+  description?: string;
+}
 
 const UserSearch = () => {
   const [username, setUsername] = useState("");
-  const [debouncedUsername] = useDebounce(username, 500);
+  const debouncedUsername = useDebounce(username, 500);
   const [page, setPage] = useState(1);
+
+  const perPage = 4;
+  const token = `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`;
 
   const { data, error, isLoading } = useGetUserQuery(debouncedUsername);
 
@@ -19,13 +26,16 @@ const UserSearch = () => {
     data: reposData,
     error: reposError,
     isLoading: isReposLoading,
-  } = useGetUserReposQuery({ username: debouncedUsername, page, perPage }, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  } as any);
+  } = useGetUserReposQuery(
+    { username: debouncedUsername, page, perPage },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e) => {
     setUsername(e.target.value);
     setPage(1);
   };
@@ -34,19 +44,12 @@ const UserSearch = () => {
     setPage(newPage);
   };
 
-  function formatNumber(num: number): string {
+  function roundedFormatFollowersNumber(num: number): string {
     if (num >= 1000) {
       return `${(num / 100).toFixed(1)}k`;
     }
     return num.toString();
   }
-
-  // const paginationFunc = () => {
-  //   handlePageChange(page + 1);
-  // };
-  // let countPage = data?.public_repos
-  //   ? Math.ceil(data.public_repos / perPage)
-  //   : 0;
 
   return (
     <>
@@ -70,9 +73,10 @@ const UserSearch = () => {
           <>
             {isLoading && <p>Loading...</p>}
             {error && (
-              <p>
-                Error: {"message" in error ? error.message : "Unknown error"}
-              </p>
+              <div>
+                <p>Error:</p>
+                <pre>{JSON.stringify(error, null, 2)}</pre>
+              </div>
             )}
 
             {data && (
@@ -86,17 +90,11 @@ const UserSearch = () => {
                 <div className="user-login">{data.login}</div>
                 <div className="follow-container">
                   <div className="user-followers">
-                    <img
-                      src="../public/followers.png"
-                      className="followers-img"
-                    />
-                    {formatNumber(data.followers)} followers
+                    <img src={imgFollowers} className="followers-img" />
+                    {roundedFormatFollowersNumber(data.followers)} followers
                   </div>
                   <div className="user-following">
-                    <img
-                      src="../public/following.png"
-                      className="following-img"
-                    />
+                    <img src={imgFollowing} className="following-img" />
                     {data.following} following
                   </div>
                 </div>
@@ -105,57 +103,37 @@ const UserSearch = () => {
 
             {isReposLoading && <p>Loading repositories...</p>}
             {reposError && (
-              <p>
-                Error loading repositories:{" "}
-                {"message" in reposError ? reposError.message : "Unknown error"}
-              </p>
+              <div>
+                <p>Error:</p>
+                <pre>{JSON.stringify(error, null, 2)}</pre>
+              </div>
             )}
 
             {reposData && reposData.length > 0 ? (
               <div className="repos-container">
                 <h1 className="title">Repositories ({data.public_repos})</h1>
                 <ul className="repos">
-                  {reposData.map(
-                    (repo: {
-                      id: number;
-                      name: string;
-                      description?: string;
-                    }) => (
-                      <li key={repo.id} className="repos-element">
-                        <div className="repo-name">{repo.name}</div>
-                        <div className="repo.description">
-                          {repo.description || "No description available"}
-                        </div>
-                      </li>
-                    )
-                  )}
+                  {reposData.map((repo: Repo) => (
+                    <li key={repo.id} className="repos-element">
+                      <div className="repo-name">{repo.name}</div>
+                      <div className="repo.description">
+                        {repo.description || "No description available"}
+                      </div>
+                    </li>
+                  ))}
                 </ul>
                 <div className="pagination">
                   <div>1-4 of {data.public_repos} items</div>
-                  <button
-                    onClick={() => handlePageChange(page - 1)}
-                    disabled={page === 1}
-                    className="btn-arrow"
-                  >
-                    <img src="../public/left-arrow.png" alt="" />
-                  </button>
-                  <span> Page {page} </span>
-                  <button
-                    onClick={() => handlePageChange(page + 1)}
-                    disabled={reposData.length < perPage}
-                    className="btn-arrow"
-                  >
-                    <img src="../public/right-arrow.png" alt="" />
-                  </button>
-                  {/* <Stack spacing={2}>
-                    <Stack spacing={2}>
-                      <Pagination count={countPage} onClick={paginationFunc} />
-                    </Stack>
-                  </Stack> */}
+                  <Pagination
+                    page={page}
+                    handlePageChange={handlePageChange}
+                    totalItems={data.public_repos}
+                    perPage={perPage}
+                  />
                 </div>
               </div>
             ) : (
-              <p>No repositories found.</p>
+              <p> No repositories.</p>
             )}
           </>
         )}
