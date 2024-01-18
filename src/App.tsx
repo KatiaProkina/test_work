@@ -2,19 +2,15 @@ import { useState } from "react";
 import "./style.css";
 import { useGetUserQuery, useGetUserReposQuery } from "./gitHubApiSlice";
 import useDebounce from "./useDebounce";
-import Pagination from "./Pagination";
-import imgFollowers from "../public/followers.png";
-import imgFollowing from "../public/following.png";
+import Header from "./Header";
+import UserInfo from "./UserInfo";
+import UserRepos from "./UserRepos";
 
-interface Repo {
-  id: number;
-  name: string;
-  description?: string;
-}
+const delay = 500;
 
 const UserSearch = () => {
   const [username, setUsername] = useState("");
-  const debouncedUsername = useDebounce(username, 500);
+  const debouncedUsername = useDebounce(username, delay);
   const [page, setPage] = useState(1);
 
   const perPage = 4;
@@ -53,20 +49,7 @@ const UserSearch = () => {
 
   return (
     <>
-      <header className="header">
-        <div>
-          <img src="../public/github.png" alt="" className="logo" />
-        </div>
-        <div className="search-div">
-          <img src="../public/search_icon.png" alt="" className="search_icon" />
-          <input
-            value={username}
-            onChange={handleInputChange}
-            placeholder="Enter GitHub username"
-            className="input_search"
-          />
-        </div>
-      </header>
+      <Header handleInputChange={handleInputChange} username={username} />
 
       <div className="user-container">
         {debouncedUsername && debouncedUsername.length > 0 && (
@@ -80,25 +63,10 @@ const UserSearch = () => {
             )}
 
             {data && (
-              <div className="user-information">
-                <img
-                  src={data.avatar_url}
-                  alt="User Avatar"
-                  className="avatar-img"
-                />
-                <div className="user-name"> {data.name || "N/A"}</div>
-                <div className="user-login">{data.login}</div>
-                <div className="follow-container">
-                  <div className="user-followers">
-                    <img src={imgFollowers} className="followers-img" />
-                    {roundedFormatFollowersNumber(data.followers)} followers
-                  </div>
-                  <div className="user-following">
-                    <img src={imgFollowing} className="following-img" />
-                    {data.following} following
-                  </div>
-                </div>
-              </div>
+              <UserInfo
+                data={data}
+                roundedFormatFollowersNumber={roundedFormatFollowersNumber}
+              />
             )}
 
             {isReposLoading && <p>Loading repositories...</p>}
@@ -110,30 +78,20 @@ const UserSearch = () => {
             )}
 
             {reposData && reposData.length > 0 ? (
-              <div className="repos-container">
-                <h1 className="title">Repositories ({data.public_repos})</h1>
-                <ul className="repos">
-                  {reposData.map((repo: Repo) => (
-                    <li key={repo.id} className="repos-element">
-                      <div className="repo-name">{repo.name}</div>
-                      <div className="repo.description">
-                        {repo.description || "No description available"}
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-                <div className="pagination">
-                  <div>1-4 of {data.public_repos} items</div>
-                  <Pagination
-                    page={page}
-                    handlePageChange={handlePageChange}
-                    totalItems={data.public_repos}
-                    perPage={perPage}
-                  />
-                </div>
-              </div>
+              <UserRepos
+                reposData={reposData}
+                data={data}
+                page={page}
+                handlePageChange={handlePageChange}
+                perPage={perPage}
+              />
             ) : (
-              <p> No repositories.</p>
+              reposError && (
+                <div>
+                  <p>Error:</p>
+                  <pre>{JSON.stringify(reposError, null, 2)}</pre>
+                </div>
+              )
             )}
           </>
         )}
