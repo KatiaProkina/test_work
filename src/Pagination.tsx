@@ -1,5 +1,3 @@
-import React from "react";
-
 const Pagination = ({ page, handlePageChange, totalItems, perPage }) => {
   const totalPages = Math.ceil(totalItems / perPage);
 
@@ -7,6 +5,31 @@ const Pagination = ({ page, handlePageChange, totalItems, perPage }) => {
   for (let i = 1; i <= totalPages; i++) {
     pageNumbers.push(i);
   }
+  const isValidPageNumber = (pageNumber) =>
+    pageNumber >= page - 2 &&
+    pageNumber <= page + 2 &&
+    pageNumber <= Math.ceil(totalItems / perPage);
+
+  const renderPaginationItem = (pageNumber, index, array) => {
+    index > 0 && pageNumber - array[index - 1] > 1;
+  };
+
+  const paginationButtons = Array.from({ length: totalPages }, (_, i) => i + 1)
+    .filter(isValidPageNumber)
+    .map((pageNumber, index, array) => (
+      <>
+        {renderPaginationItem(pageNumber, index, array) && (
+          <span key={`ellipsis-${pageNumber - 1}`}>...</span>
+        )}
+        <button
+          key={pageNumber}
+          onClick={() => handlePageChange(pageNumber)}
+          className={pageNumber === page ? "active" : ""}
+        >
+          {pageNumber}
+        </button>
+      </>
+    ));
 
   return (
     <div className="pagination">
@@ -18,43 +41,15 @@ const Pagination = ({ page, handlePageChange, totalItems, perPage }) => {
         <img src="../public/left-arrow.png" alt="" />
       </button>
       <span>
-        {Array.from(
-          { length: Math.ceil(totalItems / perPage) },
-          (_, i) => i + 1
-        )
-          .filter(
-            (pageNumber) =>
-              pageNumber >= page - 2 &&
-              pageNumber <= page + 2 &&
-              pageNumber <= Math.ceil(totalItems / perPage)
-          )
-          .map((pageNumber, index, array) => (
-            <>
-              {index > 0 && pageNumber - array[index - 1] > 1 && (
-                <span key={`ellipsis-${pageNumber - 1}`}>...</span>
-              )}
-              <button
-                key={pageNumber}
-                onClick={() => handlePageChange(pageNumber)}
-                className={pageNumber === page ? "active" : ""}
-              >
-                {pageNumber}
-              </button>
-            </>
-          ))}
-        {Math.ceil(totalItems / perPage) > 4 &&
-          page + 2 < Math.ceil(totalItems / perPage) && (
-            <>
-              <span>........</span>
-              <button
-                onClick={() =>
-                  handlePageChange(Math.ceil(totalItems / perPage))
-                }
-              >
-                {Math.ceil(totalItems / perPage)}
-              </button>
-            </>
-          )}
+        {paginationButtons}
+        {totalPages > 4 && page + 2 < totalPages && (
+          <>
+            <span>........</span>
+            <button onClick={() => handlePageChange(totalPages)}>
+              {totalPages}
+            </button>
+          </>
+        )}
       </span>
       <button
         onClick={() => handlePageChange(page + 1)}
